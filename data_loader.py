@@ -10,7 +10,7 @@ from utils import config
 
 class DataLoader:
     """Handles loading and processing of data files."""
-
+    
     @staticmethod
     def load_helicopters() -> pd.DataFrame:
         """Load helicopter data from CSV file."""

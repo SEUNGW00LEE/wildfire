@@ -1,4 +1,4 @@
-name: wildfire
+name: wildfire 
 channels:
   - conda-forge
   - defaults
@@ -9,10 +9,10 @@ dependencies:
   - matplotlib=3.10.3
   - geopandas=1.0.1
   - pyomo=6.9.2
-  - coin-or-cbc=2.10.12
-  - glpk=5.0
+  - coin-or-cbc=2.10.12 # CBC Solver
+  - glpk=5.0          # GLPK Solver
   - pip=25.1.1
-  - pip:
-      - geopy==2.4.1
-      - pyproj==3.7.1
-      - shapely==2.1.1
+  - cvxopt
+  - geopy=2.4.1  
+  - pyproj=3.7.1 
+  - shapely=2.1.1

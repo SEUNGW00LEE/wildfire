@@ -9,20 +9,28 @@
   },
   "optimization": {
     "fuel_rate": 0.15,
-    "big_penalty": 10000,
-    "golden_time_minutes": 40,
+    "big_penalty": 100,
+    "golden_time_minutes": 15,
     "scenario_time_window_minutes": 30,
     "max_helicopter_range_km": 120
   },
   "solver": {
     "name": "glpk",
-    "executable_path": "home/seungwoo/wildfire/WildfireOptimizer/config.json"
+    "executable_path": ""
   },
   "simulation": {
     "random_seed": 40,
     "fire_helicopter_needs": {
-      "options": [1, 2, 3],
-      "weights": [0.5, 0.3, 0.2]
+      "options": [
+        1,
+        2,
+        3
+      ],
+      "weights": [
+        0.5,
+        0.3,
+        0.2
+      ]
     }
   }
 }

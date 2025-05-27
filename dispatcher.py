@@ -1,36 +1,18 @@
 """
-Wildfire Helicopter Dispatch Optimization System
-
-This module provides functionality for helicopter dispatch optimization in wildfire scenarios.
-It includes both basic deployment logic and advanced optimization using Pyomo.
-All data is loaded from CSV files for maximum flexibility.
-Configuration is loaded from config.json file.
-
-Dependencies:
-- os, sys, csv, random, datetime
-- pandas, geopandas, matplotlib
-- pyomo.environ
+Wildfire Helicopter Dispatch Classes
+This module contains the dispatcher classes for helicopter dispatch optimization.
+Separated from main_dispatch.py for better code organization.
 """
 
-import os
-import sys
-import csv
 import random
-import datetime
-from typing import List, Dict, Tuple, Any, Optional
-
 import pandas as pd
-import geopandas as gpd
-import matplotlib.pyplot as plt
-from pyomo.environ import *
+from typing import List, Dict, Any
 
-from utils import config, ConfigManager, GeoUtils, ScenarioGenerator
+from utils import config, GeoUtils, ScenarioGenerator
 from data_loader import DataLoader
 from pyomo_optimizer import PyomoOptimizer
 
-##############################################################################
-# Basic Dispatch Logic
-##############################################################################
+
 class BasicDispatcher:
     """Implements a simplified dispatch logic based on proximity."""
     
@@ -115,9 +97,7 @@ class BasicDispatcher:
         
         return pd.DataFrame(dispatch_log)
 
-##############################################################################
-# Main Dispatcher Class
-##############################################################################
+
 class WildfireDispatcher:
     """Main class for wildfire helicopter dispatch."""
     
@@ -202,61 +182,3 @@ class WildfireDispatcher:
             result_df["Fire Index"] = result_df["Fire Index"] + 1
         
         return result_df
-    
-    @staticmethod
-    def plot_results(result_df: pd.DataFrame, title: str = "Dispatch Results"):
-        """Plot dispatch results."""
-        if result_df.empty or "Fuel Cost" in result_df.columns:
-            print("No data to plot.")
-            return
-            
-        plt.figure(figsize=(10, 6))
-        
-        df_plot = result_df.groupby("Fire Index")["Fuel Cost"].sum().reset_index()
-        plt.bar(df_plot["Fire Index"], df_plot["Fuel Cost"])
-        plt.xlabel("Fire Index")
-        plt.ylabel("Total Fuel Cost")
-        plt.title(title)
-        plt.grid(axis='y', linestyle='--', alpha=0.7)
-        plt.tight_layout()
-        plt.show()
-
-if __name__ == "__main__":
-    # Check if required CSV files exist
-    print("Checking required CSV files...")
-    
-    # Load fire data from CSV
-    fire_data = DataLoader.load_fires()
-    
-    if not fire_data:
-        print("No fire data loaded. Please check the fireinfo.csv file.")
-        sys.exit(1)
-    
-    print(f"\nLoaded {len(fire_data)} fires from CSV file")
-    
-    # Create WildfireDispatcher instance
-    dispatcher = WildfireDispatcher()
-    
-    # Test basic dispatch logic
-    print("\n=== 기본 배치 로직 결과 ===")
-    df_basic = dispatcher.dispatch_basic(fire_data)
-    if not df_basic.empty:
-        print(df_basic)
-    else:
-        print("기본 배치 결과가 없습니다.")
-    
-    # Test optimization logic
-    print("\n=== 최적화 결과 ===")
-    df_opt = dispatcher.dispatch_optimized(fire_data)
-    if not df_opt.empty:
-        print(df_opt)
-    else:
-        print("최적화 결과가 없습니다.")
-    
-    # Visualize results
-    if not df_opt.empty and "Fuel Cost" in df_opt.columns:
-        WildfireDispatcher.plot_results(df_opt, "Optimized Dispatch Results")
-    else:
-        print("No optimization results to plot.")
-    
-    print("\n=== 실행 완료 ===")
